@@ -18,6 +18,8 @@ maven{
 to the list of repositories in your `build.gradle`.
 
 Finally, add `"com.mojang:brigadier:1.0.18"` as a dependency.
+
+You may also compile your own version of the mod, allowing you to change the base command from "/dbd".
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
