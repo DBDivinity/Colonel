@@ -36,7 +36,7 @@ apply plugin: 'forge'
 versioning {
     major 1
     minor 0
-    patch 1
+    patch 0
 }
 
 version = versioning.name
@@ -99,13 +99,12 @@ processResources {
     }
 }
 
-task shadeStuff(type: ShadowJar){
+shadowJar {
     configurations = [project.configurations.shaded]
-    from sourceSets.main.output
+    classifier "server"
     dependencies{
         include(dependency("com.mojang:brigadier"))
     }
-    relocate 'com.mojang.brigadier', 'shaded.brigadier'
 }
-build.dependsOn clean
-build.finalizedBy shadeStuff
+
+build.finalizedBy shadowJar
