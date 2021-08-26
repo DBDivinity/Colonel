@@ -1,0 +1,111 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            name = "forge"
+            url = "https://files.minecraftforge.net/maven"
+        }
+        maven {
+            name = "sonatype"
+            url = "https://oss.sonatype.org/content/repositories/snapshots/"
+        }
+        maven{
+            name = "mojang"
+            url "libraries.minecraft.net"
+        }
+        mavenLocal()
+    }
+    dependencies {
+        classpath ('com.anatawa12.forge:ForgeGradle:1.2-1.0.+') {
+            changing = true
+        }
+    }
+}
+
+
+plugins {
+    id "eu.davidea.grabver" version "2.0.2"
+    id "com.github.gmazzo.buildconfig" version "3.0.2"
+    id "com.github.johnrengelman.shadow" version "7.0.0"
+}
+
+apply plugin: 'forge'
+
+versioning {
+    major 1
+    minor 0
+    patch 1
+}
+
+version = versioning.name
+group= "com.dbdivinity.colonel" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = "colonel"
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+minecraft {
+    version = "1.7.10-10.13.4.1614-1.7.10"
+    runDir = "eclipse"
+}
+
+buildConfig {
+    className("ModInfo")
+    packageName(group+".util")
+    buildConfigField('String', 'id', "\"$archivesBaseName\"")
+    buildConfigField('String', 'version', "\"$version\"")
+    buildConfigField('String', 'baseCommand', "\"dbd\"")
+}
+
+configurations{
+    shaded
+    implementation.extendsFrom shaded
+}
+
+dependencies {
+    // you may put jars on which you depend on in ./libs
+    // or you may define them like so..
+    //compile "some.group:artifact:version:classifier"
+    //compile "some.group:artifact:version"
+      
+    // real examples
+    //compile 'com.mod-buildcraft:buildcraft:6.0.8:dev'  // adds buildcraft to the dev env
+    //compile 'com.googlecode.efficient-java-matrix-library:ejml:0.24' // adds ejml to the dev env
+
+    // for more info...
+    // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
+    // http://www.gradle.org/docs/current/userguide/dependency_management.html
+    shaded "com.mojang:brigadier:1.0.18"
+}
+
+processResources {
+    // this will ensure that this task is redone when the versions change.
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
+
+    // replace stuff in mcmod.info, nothing else
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+        duplicatesStrategy DuplicatesStrategy.INCLUDE
+        // replace version and mcversion
+        expand 'version':project.version, 'mcversion':project.minecraft.version
+    }
+        
+    // copy everything else, thats not the mcmod.info
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+    }
+}
+
+task shadeStuff(type: ShadowJar){
+    configurations = [project.configurations.shaded]
+    from sourceSets.main.output
+    dependencies{
+        include(dependency("com.mojang:brigadier"))
+    }
+    relocate 'com.mojang.brigadier', 'shaded.brigadier'
+}
+build.dependsOn clean
+build.finalizedBy shadeStuff

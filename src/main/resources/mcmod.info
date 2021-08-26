@@ -1,0 +1,18 @@
+[
+  {
+    "modid": "colonel",
+    "name": "Colonel",
+    "description": "A command system built off Minecraft's Brigadier",
+    "version": "${version}",
+    "mcversion": "${mcversion}",
+    "url": "",
+    "updateUrl": "",
+    "authorList": [
+      "NolValue"
+    ],
+    "credits": "",
+    "logoFile": "",
+    "screenshots": [],
+    "dependencies": []
+  }
+]
