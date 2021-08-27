@@ -77,6 +77,7 @@ dependencies {
     // for more info...
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
+
     shaded "com.mojang:brigadier:1.0.18"
 }
 
@@ -101,10 +102,19 @@ processResources {
 
 shadowJar {
     configurations = [project.configurations.shaded]
-    classifier "server"
+    // In order to be obfuscated, it must override the original jar.
+    classifier ""
     dependencies{
         include(dependency("com.mojang:brigadier"))
     }
 }
 
-build.finalizedBy shadowJar
+task deobfJar(type: Jar){
+    classifier "deobf"
+    from sourceSets.main.output
+}
+reobf {
+    shadowJar{}
+}
+
+build.finalizedBy deobfJar
