@@ -113,8 +113,6 @@ task deobfJar(type: Jar){
     classifier "deobf"
     from sourceSets.main.output
 }
-reobf {
-    shadowJar{}
-}
 
+reobf.dependsOn shadowJar
 build.finalizedBy deobfJar
