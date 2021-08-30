@@ -2,6 +2,7 @@ package com.dbdivinity.colonel.command.builtin;
 
 import com.dbdivinity.colonel.command.Commands;
 import com.dbdivinity.colonel.util.ComponentUtils;
+import com.dbdivinity.colonel.util.ModInfo;
 import com.google.common.collect.Iterables;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.ParseResults;
@@ -42,7 +43,7 @@ public class HelpCommand {
                 while (commands.hasNext()) {
                     String var5 = commands.next();
                     String var10003 = var2.getReader().getString();
-                    sender.getSource().addChatMessage(new ChatComponentText("/" + var10003 + " " + var5));
+                    sender.getSource().addChatMessage(new ChatComponentText("/" + ModInfo.baseCommand + " " + var10003 + " " + var5));
                 }
 
                 return nodeMap.size();

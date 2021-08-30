@@ -4,6 +4,7 @@ import com.dbdivinity.colonel.util.ModInfo;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ForgeCommand extends CommandBase {
@@ -17,7 +18,7 @@ public class ForgeCommand extends CommandBase {
 
     @Override
     public String getCommandUsage(ICommandSender sender) {
-        return null;
+        return "/"+ModInfo.baseCommand+" help";
     }
 
     @Override
@@ -29,8 +30,8 @@ public class ForgeCommand extends CommandBase {
     }
 
     @Override
-    public List addTabCompletionOptions(ICommandSender sender, String[] args) {
-        return null;
+    public List<String> addTabCompletionOptions(ICommandSender sender, String[] args) {
+        return new ArrayList<>();
     }
 
     @Override
